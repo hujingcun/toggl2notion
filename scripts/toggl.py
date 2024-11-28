@@ -73,6 +73,7 @@ def insert_to_notion():
                 start = start.in_timezone("Asia/Shanghai").int_timestamp
                 stop = stop.in_timezone("Asia/Shanghai").int_timestamp
                 item["时间"] = (start, stop)
+                emoji = '⏰'
                 if project_id:
                     workspace_id = task.get("workspace_id")
                     response = requests.get(
