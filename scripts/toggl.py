@@ -22,6 +22,7 @@ def get_time_entries():
     response = requests.get(
         "https://api.track.toggl.com/api/v9/me/time_entries", params=params, auth=auth
     )
+    print(response)
     time_entries = response.json()
     return time_entries
 
