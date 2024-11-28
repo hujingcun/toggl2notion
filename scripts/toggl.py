@@ -48,17 +48,15 @@ def insert_to_notion():
             .get("end")
         )
     params = {"start_date": start, "end_date": end}
-    print(params)
     response = requests.get(
         "https://api.track.toggl.com/api/v9/me/time_entries", params=params, auth=auth
     )
     if response.ok:
         print(response.text)
         time_entries = response.json()
-    
         time_entries.sort(key=lambda x: x["start"], reverse=False)
         for task in time_entries:
-            if task.get("pid") is not None and task.get("stop") is not None:
+            if task.get("stop") is not None:
                 item = {}
                 tags = task.get("tags")
                 if tags:
