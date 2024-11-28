@@ -52,7 +52,6 @@ def insert_to_notion():
         "https://api.track.toggl.com/api/v9/me/time_entries", params=params, auth=auth
     )
     if response.ok:
-        print(response.text)
         time_entries = response.json()
         time_entries.sort(key=lambda x: x["start"], reverse=False)
         for task in time_entries:
@@ -69,13 +68,13 @@ def insert_to_notion():
                 id = task.get("id")
                 item["Id"] = id
                 project_id = task.get("project_id")
+                start = pendulum.parse(task.get("start"))
+                stop = pendulum.parse(task.get("stop"))
+                start = start.in_timezone("Asia/Shanghai").int_timestamp
+                stop = stop.in_timezone("Asia/Shanghai").int_timestamp
+                item["时间"] = (start, stop)
                 if project_id:
                     workspace_id = task.get("workspace_id")
-                    start = pendulum.parse(task.get("start"))
-                    stop = pendulum.parse(task.get("stop"))
-                    start = start.in_timezone("Asia/Shanghai").int_timestamp
-                    stop = stop.in_timezone("Asia/Shanghai").int_timestamp
-                    item["时间"] = (start, stop)
                     response = requests.get(
                         f"https://api.track.toggl.com/api/v9/workspaces/{workspace_id}/projects/{project_id}",
                         auth=auth,
